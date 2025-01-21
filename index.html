@@ -1,110 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gemini 2.0 Flash Multimodal Live API Client</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="css/style.css">
-    <style>
-           #floating-orb {
-            position: fixed;
-            bottom: 50px;
-            right: 50px;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background-color: #4285f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            z-index: 1001;
-        }
-
-        #floating-orb.active {
-            background-color: #ea4335;
-        }
-
-        #floating-orb::before {
-            content: '';
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #fff;
-            opacity: 0.7;
-            transition: all 0.3s ease;
-        }
-
-        #floating-orb.active::before {
-            width: 30px;
-            height: 30px;
-            opacity: 1;
-            background-color: #4285f4;
-        }
-
-        #floating-orb .orb-icon {
-            font-size: 40px;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        #floating-orb.active .orb-icon {
-            font-size: 30px;
-            color: white;
-        }
-          #app {
-           display: none !important;
-        }
-
-        #embedded-website {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            z-index: 1;
-        }
-        .loading-pulse {
-           animation: loading-pulse 1s linear infinite;
-        }
-
-        @keyframes loading-pulse {
-            0% {
-               transform: scale(1);
-               opacity: 0.8;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-            100%{
-                transform: scale(1);
-                 opacity: 0.8;
-            }
-        }
-         .audio-pulse {
-            animation: audio-pulse 0.5s infinite;
-        }
-        @keyframes audio-pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-    </style>
 </head>
-
 <body>
-     <iframe id="embedded-website" src="https://daisy.aitekchat.com/scribe/template.html"></iframe>
-    <div id="floating-orb">
-         <span class="orb-icon material-symbols-outlined">lens</span>
-    </div>
     <div id="app">
 
         <!-- Main Controls -->
@@ -144,8 +47,7 @@
                     <option value="Aoede">Aoede (Female)</option>
                 </select>
                 <div class="sample-rate-container">
-                    <input type="number" id="sample-rate-input" placeholder="Sample Rate (Hz)" min="8000" max="48000"
-                        step="1000">
+                    <input type="number" id="sample-rate-input" placeholder="Sample Rate (Hz)" min="8000" max="48000" step="1000">
                     <span class="sample-rate-help">up for high pitch, down for low</span>
                 </div>
                 <textarea id="system-instruction" placeholder="Enter custom system instructions..." rows="3"></textarea>
@@ -206,45 +108,5 @@
         </div>
     </div>
     <script src="js/main.js" type="module"></script>
-   <script>
-         const floatingOrb = document.getElementById('floating-orb');
-          let tapCount = 0;
-          let isConnected = false;
-
-          floatingOrb.addEventListener('click', async () => {
-              tapCount++;
-            if(tapCount === 1 && !isConnected) {
-                  floatingOrb.classList.add('loading-pulse');
-                floatingOrb.querySelector('.orb-icon').textContent = 'sync';
-                  console.log("Connecting to websocket...");
-                   await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate connection delay
-                  isConnected = true;
-                  console.log("Websocket connected!");
-                  floatingOrb.classList.remove('loading-pulse');
-                floatingOrb.querySelector('.orb-icon').textContent = 'mic';
-              }else if (tapCount === 2 && isConnected) {
-                    console.log("Requesting mic access...");
-                try {
-                    await navigator.mediaDevices.getUserMedia({ audio: true });
-                    console.log("Microphone permission granted!");
-                    floatingOrb.classList.add('audio-pulse');
-                      floatingOrb.querySelector('.orb-icon').textContent = 'volume_up';
-                } catch (error) {
-                   floatingOrb.querySelector('.orb-icon').textContent = 'error';
-                    console.error("Microphone permission failed:", error);
-                }
-              }
-              else if (tapCount >= 3) {
-                  floatingOrb.classList.remove('active');
-                   floatingOrb.classList.remove('audio-pulse');
-                floatingOrb.classList.remove('loading-pulse');
-                  floatingOrb.querySelector('.orb-icon').textContent = 'lens';
-                  isConnected = false;
-                tapCount = 0;
-                console.log("Disconnected.");
-              }
-          });
-    </script>
 </body>
-
-</html>
+</html> 
